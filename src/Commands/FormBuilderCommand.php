@@ -6,10 +6,9 @@ use Illuminate\Console\Command;
 
 class FormBuilderCommand extends Command
 {
-    protected $signature = 'template:make {url} {name?}';
+    protected $signature = 'make:form {name}';
 
-
-    protected $description = 'Template description';
+    protected $description = 'Generate a new Form class';
 
     public function __construct()
     {
@@ -18,16 +17,36 @@ class FormBuilderCommand extends Command
 
     public function handle()
     {
-        if($this->argument('name') == null)
-        {
-            $name = str_random(8);
-        } else {
-            $name = $this->argument('name');
-        }
+        $template =
+"<?php
 
-        if($this->confirm('Are you sure you want to create a short url for ' . $this->argument('url') . '?'))
+namespace App\Http\Forms;
+
+use MihaiBlebea\FormBuilder\FormBuilder;
+
+
+class " . $this->argument('name') . "
+{
+    public static function build(FormBuilder \$form)
+    {
+        return \$form->input([
+            'label'       => 'Insert your name:',
+            'name'        => 'name',
+            'type'        => 'text',
+            'placeholder' => 'Please put your name'
+        ])->button([
+            'label' => 'Save'
+        ]);
+    }
+}";
+
+        $written = \File::put('app/Http/Forms/' . $this->argument('name') . '.php', $template);
+
+        if($written)
         {
-            // Do some logic in here //
+            $this->info('Created new Repo ' . $this->argument('name') . '.php in App\Http\Forms.');
+        } else {
+            $this->info('Something went wrong');
         }
     }
 }
