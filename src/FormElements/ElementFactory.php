@@ -29,6 +29,8 @@ class ElementFactory
                 return new RadioElement($attr);
             case $class === 'custom':
                 return new CustomElement($attr);
+            case $class === 'button':
+                return new ButtonElement($attr);
             default:
                 return new InputElement($attr);
         }
