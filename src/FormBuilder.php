@@ -15,6 +15,8 @@ class FormBuilder
 
     public $buttons;
 
+    public $validation;
+
     public function __construct(Array $form)
     {
         $this->checkRequired(['action', 'method'], $form);
@@ -23,6 +25,26 @@ class FormBuilder
 
         $this->elements = collect([]);
         $this->buttons = collect([]);
+
+        $this->validation = collect([
+            'input'    => ['type', 'name'],
+            'textarea' => ['name'],
+            'select'   => ['name'],
+            'checkbox' => ['name'],
+            'radio'    => ['name'],
+            'custom'   => ['name'],
+        ]);
+    }
+
+    public function __call($name, $arguments)
+    {
+        $attr = $arguments[0];
+        if($this->validation->has($name) === false)
+        {
+            ErrorHandler::methodIsNotValid($name);
+        }
+        $this->generateElement($name, $attr);
+        return $this;
     }
 
     public function getElements()
@@ -40,9 +62,9 @@ class FormBuilder
         return $this->method;
     }
 
-    public function getButton()
+    public function getButtons()
     {
-        return $this->button;
+        return $this->buttons;
     }
 
     public function addValues(Array $values)
@@ -67,46 +89,20 @@ class FormBuilder
         }
     }
 
-    public function input(Array $attr)
+    private function generateLabel(Array $attr)
     {
-        $this->checkRequired(['label', 'type', 'name'], $attr);
-        $this->elements[$attr['name']] = ElementFactory::create('input', $attr);
-        return $this;
+        if(isset($attr['label']) === false)
+        {
+            $attr['label'] = ucfirst(str_replace('_', ' ', $attr['name'])) . ':';
+        }
+        return $attr;
     }
 
-    public function textarea(Array $attr)
+    public function generateElement(String $name, Array $attr)
     {
-        $this->checkRequired(['label', 'name'], $attr);
-        $this->elements[$attr['name']] = ElementFactory::create('textarea', $attr);
-        return $this;
-    }
-
-    public function select(Array $attr)
-    {
-        $this->checkRequired(['label', 'name'], $attr);
-        $this->elements[$attr['name']] = ElementFactory::create('select', $attr);
-        return $this;
-    }
-
-    public function checkbox(Array $attr)
-    {
-        $this->checkRequired(['label', 'name'], $attr);
-        $this->elements[$attr['name']] = ElementFactory::create('checkbox', $attr);
-        return $this;
-    }
-
-    public function radio(Array $attr)
-    {
-        $this->checkRequired(['label', 'name'], $attr);
-        $this->elements[$attr['name']] = ElementFactory::create('radio', $attr);
-        return $this;
-    }
-
-    public function custom(Array $attr)
-    {
-        $this->checkRequired(['label', 'name'], $attr);
-        $this->elements[$attr['name']] = ElementFactory::create('custom', $attr);
-        return $this;
+        $this->checkRequired($this->validation[$name], $attr);
+        $attr = $this->generateLabel($attr);
+        $this->elements[$attr['name']] = ElementFactory::create($name, $attr);
     }
 
     public function button(Array $attr)
@@ -115,6 +111,5 @@ class FormBuilder
         $this->buttons->push(ElementFactory::create('button', $attr));
         return $this;
     }
-
 
 }

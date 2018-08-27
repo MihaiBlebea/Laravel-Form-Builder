@@ -21,4 +21,9 @@ class ErrorHandler
     {
         throw new Exception('Child does not have this attribute');
     }
+
+    public static function methodIsNotValid(String $name)
+    {
+        throw new Exception('This method ' . $name . ' is not a valid one');
+    }
 }
