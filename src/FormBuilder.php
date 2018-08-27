@@ -13,7 +13,7 @@ class FormBuilder
 
     public $method;
 
-    public $button = 'Submit';
+    public $buttons;
 
     public function __construct(Array $form)
     {
@@ -22,6 +22,7 @@ class FormBuilder
         $this->method = $form['method'];
 
         $this->elements = collect([]);
+        $this->buttons = collect([]);
     }
 
     public function getElements()
@@ -111,7 +112,7 @@ class FormBuilder
     public function button(Array $attr)
     {
         $this->checkRequired(['label'], $attr);
-        $this->button = $attr;
+        $this->buttons->push(ElementFactory::create('button', $attr));
         return $this;
     }
 

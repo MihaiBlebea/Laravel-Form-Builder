@@ -17,8 +17,12 @@
 
 @endforeach
 
-@include('vendor.form-builder._button', [
-    'label' => isset($button_label) ? $button_label : $form->getButton()['label']
-])
+@foreach($form->getButtons() as $button)
+
+    @include('vendor.form-builder._button', [
+        'el' => $button
+    ])
+
+@endforeach
 
 </form>
