@@ -5,9 +5,15 @@
 
 @foreach($form->getElements() as $element)
 
-    @include('vendor.form-builder._' . $element->element, [
-        'el' => $element
-    ])
+    @if($element->element !== 'custom')
+        @include('vendor.form-builder._' . $element->element, [
+            'el' => $element
+        ])
+    @else
+        @include($element->getTemplate(), [
+            'el' => $element
+        ])
+    @endif
 
 @endforeach
 

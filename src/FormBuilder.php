@@ -101,6 +101,13 @@ class FormBuilder
         return $this;
     }
 
+    public function custom(Array $attr)
+    {
+        $this->checkRequired(['label', 'name'], $attr);
+        $this->elements[$attr['name']] = ElementFactory::create('custom', $attr);
+        return $this;
+    }
+
     public function button(Array $attr)
     {
         $this->checkRequired(['label'], $attr);

@@ -4,6 +4,7 @@ namespace MihaiBlebea\FormBuilder\Commands;
 
 use Illuminate\Console\Command;
 
+
 class FormBuilderCommand extends Command
 {
     protected $signature = 'make:form {name}';

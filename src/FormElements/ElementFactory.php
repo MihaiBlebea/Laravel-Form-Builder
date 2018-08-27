@@ -27,6 +27,8 @@ class ElementFactory
                 return new CheckboxElement($attr);
             case $class === 'radio':
                 return new RadioElement($attr);
+            case $class === 'custom':
+                return new CustomElement($attr);
             default:
                 return new InputElement($attr);
         }
