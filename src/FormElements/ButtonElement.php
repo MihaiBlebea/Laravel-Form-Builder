@@ -26,18 +26,29 @@ class ButtonElement extends FormElement implements
         $this->class = $attr['class'] ?? 'btn-primary';
     }
 
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
+    // public function getLabel()
+    // {
+    //     return $this->label;
+    // }
+    //
+    // public function setLabel(String $value)
+    // {
+    //
+    // }
+    //
+    // public function getType()
+    // {
+    //     return $this->type;
+    // }
 
     public function getClass()
     {
         return $this->class;
+    }
+
+    public function setClass(String $class)
+    {
+        $this->class = $class;
+        return $this;
     }
 }

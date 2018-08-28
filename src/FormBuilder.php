@@ -19,9 +19,9 @@ class FormBuilder
 
     public function __construct(Array $form)
     {
-        $this->checkRequired(['action', 'method'], $form);
+        $this->checkRequired(['action'], $form);
         $this->action = $form['action'];
-        $this->method = $form['method'];
+        $this->method = $form['method'] ?? 'POST';
 
         $this->elements = collect([]);
         $this->buttons = collect([]);
@@ -76,6 +76,18 @@ class FormBuilder
                 $this->elements[$key]->addValue($value);
             }
         }
+    }
+
+    public function changeButtonLabel(String $old, String $new)
+    {
+        foreach($this->getButtons() as $button)
+        {
+            if(strtolower($button->getLabel()) === strtolower($old))
+            {
+                $button->setLabel($new);
+            }
+        }
+        return $this;
     }
 
     private function checkRequired(Array $labels, Array $attr)
